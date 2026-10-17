@@ -25,6 +25,12 @@ Download the embedding model:
 ollama pull nomic-embed-text
 ```
 
+To index `.txt` and `.md` files in `knowledge_dir`, run:
+
+```powershell
+python ingest.py
+```
+
 Run the demo:
 
 ```powershell
@@ -37,4 +43,5 @@ is excluded from Git; remove that directory to rebuild the index from scratch.
 ## Project files
 
 - `app.py` — sample documents, embedding setup, and semantic search.
+- `ingest.py` — indexes text and Markdown files from `knowledge_dir`.
 - `requirements.txt` — pinned direct Python dependencies.
