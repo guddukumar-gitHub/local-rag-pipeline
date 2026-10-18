@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from langchain_ollama import OllamaEmbeddings, ChatOllama
 from langchain_chroma import Chroma
 
-# 1. Initialize the FastAPI server instance (Like const app = express())
+# 1. Initialize the FastAPI server instance
 app = FastAPI(title="Local AI Engineering RAG API")
 
 # 2. Boot up our lightweight AI components safely
@@ -11,15 +11,15 @@ print("Loading local embeddings and LLM configuration...")
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
 llm = ChatOllama(model="llama3.2:1b", temperature=0.1)
 
-# 3. Connect to the existing vector store you built earlier
+# 3. Connect to the existing vector store
 # It reads from the local folder directory directly
 db = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
 
-# 4. Define the validation schema for incoming JSON payloads (Like a Zod schema)
+# 4. Define the validation schema for incoming JSON payloads
 class QuestionRequest(BaseModel):
     question: str
 
-# 5. Build the API endpoint (Like app.post('/api/ask', ...))
+# 5. Build the API endpoint
 @app.post("/api/ask")
 async def ask_local_ai(payload: QuestionRequest):
     try:
@@ -34,7 +34,6 @@ async def ask_local_ai(payload: QuestionRequest):
         retrieved_context = matching_docs[0].page_content
         
         # Construct the System Prompt
-                # Optimized prompt structure specifically for tiny 1B/3B local models
         system_prompt = f"""
         Task: Answer the question using ONLY the facts found in the Context below.
         Rule: Be extremely direct. Do not say "Based on the context". Do not guess or add outside assumptions.
